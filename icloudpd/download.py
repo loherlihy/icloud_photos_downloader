@@ -29,11 +29,11 @@ def update_mtime(photo, download_path):
 
 def set_utime(download_path, created_date):
     """Set date & time of the file"""
-    try:
-    epoch = time.mktime(created_date.timetuple())
-    except OverflowError or ValueError:
-    epoch = time.time()
-    os.utime(download_path, (epoch, epoch))
+    if created_date.year <= 1969:
+        ctime = 1609396107
+    else:
+        ctime = time.mktime(created_date.timetuple())
+        os.utime(download_path, (ctime, ctime))
 
 def download_media(icloud, photo, download_path, size):
     """Download the photo to path, with retries and error handling"""
